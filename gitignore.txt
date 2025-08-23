@@ -1,0 +1,65 @@
+
+
+---
+# --- Données locales (on ne versionne pas les gros CSV)
+data/
+!data/.gitkeep   # pour garder le dossier vide dans Git
+
+# --- Résultats, modèles, soumissions générés automatiquement
+results/
+models/
+submissions/
+
+# --- Fichiers temporaires Jupyter
+.ipynb_checkpoints/
+
+# --- Cache Python
+__pycache__/
+*.pyc
+
+# --- Environnement virtuel (si tu en utilises un dans le dossier)
+.venv/
+env/
+venv/
+
+# --- Fichiers système (Windows / Mac)
+.DS_Store
+Thumbs.db
+
+---
+✨ Ce que ça fait :
+
+data/, results/, models/, submissions/ → jamais poussés sur GitHub (mais tu les gardes en local).
+
+__pycache__ et *.pyc → fichiers compilés inutiles.
+
+.ipynb_checkpoints/ → versions parasites de Jupyter.
+
+.venv/, env/, venv/ → si tu crées un venv dans ton projet, il sera ignoré.
+
+.DS_Store, Thumbs.db → fichiers systèmes Mac/Windows.
+
+⚡ Trick : si tu veux garder la structure vide (par ex. data/ sans CSV), tu peux mettre un fichier vide nommé .gitkeep dedans.
+
+
+
+---
+
+3. .gitignore
+
+C’est un fichier spécial pour Git.
+
+Il dit à Git : n’ajoute pas ces fichiers/dossiers dans le dépôt GitHub.
+
+Exemple : tu ne veux pas versionner :
+
+les données brutes (data/raw/ → trop gros, pas autorisé par Kaggle/GitHub),
+
+les résultats (results/ → générés automatiquement),
+
+les modèles .pkl → lourds et régénérables,
+
+les checkpoints Jupyter .ipynb_checkpoints/ → inutiles.
+
+👉 Ça ne supprime rien de ton projet local, ça dit juste à Git ne les envoie pas sur GitHub.
+Donc ton code continuera à fonctionner normalement en local.
