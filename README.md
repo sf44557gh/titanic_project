@@ -1,8 +1,8 @@
-# Titanic Project 🚢
+# Titanic Project 
 
 Prédiction de la survie des passagers du Titanic (Kaggle).
 
-## 📂 Organisation du projet
+## Organisation du projet
 - `data/` : données brutes (non versionnées)
 - `notebooks/` : notebooks Jupyter (exploration, modélisation)
 - `src/` : scripts Python (préprocessing, modèles, training)
@@ -10,7 +10,7 @@ Prédiction de la survie des passagers du Titanic (Kaggle).
 - `submissions/` : fichiers pour soumission Kaggle
 - `models/` : modèles sauvegardés (`.pkl`)
 
-## ⚡ Installation
+## Installation
 Cloner le repo et installer les dépendances :
 ```bash
 git clone https://github.com/tonpseudo/titanic_project.git

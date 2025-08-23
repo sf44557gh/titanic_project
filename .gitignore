@@ -2,8 +2,9 @@
 
 ---
 # --- Données locales (on ne versionne pas les gros CSV)
-data/
-!data/.gitkeep   # pour garder le dossier vide dans Git
+data/raw/*.csv
+data/processed/*
+!data/processed/.gitkeep   # garde le dossier vide dans Git
 
 # --- Résultats, modèles, soumissions générés automatiquement
 results/
@@ -26,8 +27,9 @@ venv/
 .DS_Store
 Thumbs.db
 
+
 ---
-✨ Ce que ça fait :
+Ce que ça fait :
 
 data/, results/, models/, submissions/ → jamais poussés sur GitHub (mais tu les gardes en local).
 
@@ -39,7 +41,7 @@ __pycache__ et *.pyc → fichiers compilés inutiles.
 
 .DS_Store, Thumbs.db → fichiers systèmes Mac/Windows.
 
-⚡ Trick : si tu veux garder la structure vide (par ex. data/ sans CSV), tu peux mettre un fichier vide nommé .gitkeep dedans.
+Trick : pour  garder la structure vide (par ex. data/ sans CSV), tu peux mettre un fichier vide nommé .gitkeep dedans.
 
 
 
@@ -61,5 +63,5 @@ les modèles .pkl → lourds et régénérables,
 
 les checkpoints Jupyter .ipynb_checkpoints/ → inutiles.
 
-👉 Ça ne supprime rien de ton projet local, ça dit juste à Git ne les envoie pas sur GitHub.
-Donc ton code continuera à fonctionner normalement en local.
+Note: Ne supprime rien de mon projet local, ça dit juste à Git ne les envoie pas sur GitHub.
+Donc mon code continuera à fonctionner normalement en local.
