@@ -73,21 +73,29 @@ def train_models(df_train, df_test, results_file="results/results_live.csv"):
     return pd.DataFrame(results_list)
 
 '''
+# src/training.py
 import os
 import logging
 import numpy as np
 import pandas as pd
+from pathlib import Path
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, f1_score, recall_score, roc_auc_score
 
 logger = logging.getLogger(__name__)
 
-def train_models(df_train, results_file="results/results_live.csv"):
+def train_models(df_train, results_file=None):
     from src.preprocessing import clean_df, get_features, make_preprocessor
     from src.models import get_models_and_params, weighted_metric
 
-    os.makedirs(os.path.dirname(results_file), exist_ok=True)
+    # Racine du projet = un cran au-dessus du dossier "src"
+    project_root = Path(__file__).resolve().parents[1]
+
+    if results_file is None:
+        results_file = project_root / "results" / "results_live.csv"
+
+    Path(results_file).parent.mkdir(parents=True, exist_ok=True)
 
     df_train = clean_df(df_train)
     results_list = []
