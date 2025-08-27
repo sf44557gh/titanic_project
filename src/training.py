@@ -67,7 +67,7 @@ def train_models(df_train, df_test, results_file="results/results_live.csv"):
                 header = not os.path.exists(results_file)
                 df_res.drop(columns=["best_pipe"]).to_csv(results_file, mode=mode, header=header, index=False)
 
-                logger.info("💾 Résultat Run_ID=%s enregistré", run_id)
+                logger.info("Résultat Run_ID=%s enregistré", run_id)
                 run_id += 1
 
     return pd.DataFrame(results_list)
@@ -85,21 +85,33 @@ from sklearn.metrics import accuracy_score, f1_score, recall_score, roc_auc_scor
 
 logger = logging.getLogger(__name__)
 
-def train_models(df_train, results_file=None):
+def _next_run_id(results_file: Path) -> int:
+    if results_file.exists() and results_file.stat().st_size > 0:
+        try:
+            prev = pd.read_csv(results_file, usecols=["Run_ID"])
+            if not prev.empty:
+                return int(pd.to_numeric(prev["Run_ID"], errors="coerce").fillna(0).astype(int).max()) + 1
+        except Exception as e:
+            logger.warning("Lecture Run_ID impossible (%s). Repart à 1.", e)
+    return 1
+
+def train_models(df_train, results_file: str | Path | None = None):
     from src.preprocessing import clean_df, get_features, make_preprocessor
     from src.models import get_models_and_params, weighted_metric
 
-    # Racine du projet = un cran au-dessus du dossier "src"
+    # Racine du projet = un cran au-dessus de src/
     project_root = Path(__file__).resolve().parents[1]
+    results_dir = project_root / "results"
+    results_dir.mkdir(parents=True, exist_ok=True)
 
-    if results_file is None:
-        results_file = project_root / "results" / "results_live.csv"
+    results_file = Path(results_file) if results_file else (results_dir / "results_live.csv")
 
-    Path(results_file).parent.mkdir(parents=True, exist_ok=True)
+    # Run_ID persistant
+    run_id = _next_run_id(results_file)
 
+    # Entraînement
     df_train = clean_df(df_train)
     results_list = []
-    run_id = 1
 
     X_full, y_full = df_train.drop("Survived", axis=1), df_train["Survived"]
 
@@ -121,10 +133,7 @@ def train_models(df_train, results_file=None):
                 cv_acc = grid.best_score_
                 f1 = f1_score(y, y_pred_train)
                 recall = recall_score(y, y_pred_train)
-                if hasattr(grid.best_estimator_["clf"], "predict_proba"):
-                    auc = roc_auc_score(y, grid.predict_proba(X)[:, 1])
-                else:
-                    auc = np.nan
+                auc = roc_auc_score(y, grid.predict_proba(X)[:, 1]) if hasattr(grid.best_estimator_["clf"], "predict_proba") else np.nan
                 wm = weighted_metric(cv_acc, f1, recall, auc)
                 gap = cv_acc - train_acc
 
@@ -145,15 +154,13 @@ def train_models(df_train, results_file=None):
                 }
                 results_list.append(res)
 
+                # Append unique dans C:\Users\cdiac\Desktop\KaggleProjects\titanic_project\results\results_live.csv
                 df_res = pd.DataFrame([res])
-                mode = "a" if os.path.exists(results_file) else "w"
-                header = not os.path.exists(results_file)
-                df_res.drop(columns=["best_pipe"]).to_csv(
-                    results_file, mode=mode, header=header, index=False
-                )
+                mode = "a" if results_file.exists() else "w"
+                header = not results_file.exists() or results_file.stat().st_size == 0
+                df_res.drop(columns=["best_pipe"]).to_csv(results_file, mode=mode, header=header, index=False)
 
                 logger.info("Résultat enregistré dans %s (Run_ID=%s)", results_file, run_id)
                 run_id += 1
 
-    df_results = pd.DataFrame(results_list)
-    return df_results
+    return pd.DataFrame(results_list)
