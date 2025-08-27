@@ -74,11 +74,11 @@ def train_models(df_train, df_test, results_file="results/results_live.csv"):
 
 '''
 # src/training.py
-import os
 import logging
 import numpy as np
 import pandas as pd
 from pathlib import Path
+from datetime import datetime
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, f1_score, recall_score, roc_auc_score
@@ -99,17 +99,18 @@ def train_models(df_train, results_file: str | Path | None = None):
     from src.preprocessing import clean_df, get_features, make_preprocessor
     from src.models import get_models_and_params, weighted_metric
 
-    # Racine du projet = un cran au-dessus de src/
+    # Racine du projet = parent de src/
     project_root = Path(__file__).resolve().parents[1]
     results_dir = project_root / "results"
     results_dir.mkdir(parents=True, exist_ok=True)
 
+    # Chemin final du CSV (unique et stable)
     results_file = Path(results_file) if results_file else (results_dir / "results_live.csv")
 
-    # Run_ID persistant
+    # Détermine le prochain Run_ID persistant
     run_id = _next_run_id(results_file)
 
-    # Entraînement
+    # Préparation données
     df_train = clean_df(df_train)
     results_list = []
 
@@ -139,6 +140,7 @@ def train_models(df_train, results_file: str | Path | None = None):
 
                 res = {
                     "Run_ID": run_id,
+                    "Timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "Model": model_name,
                     "Use_IsAlone": use_isalone,
                     "Use_Cabin": use_cabin,
@@ -154,13 +156,13 @@ def train_models(df_train, results_file: str | Path | None = None):
                 }
                 results_list.append(res)
 
-                # Append unique dans C:\Users\cdiac\Desktop\KaggleProjects\titanic_project\results\results_live.csv
+                # Append unique dans .../titanic_project/results/results_live.csv
                 df_res = pd.DataFrame([res])
                 mode = "a" if results_file.exists() else "w"
                 header = not results_file.exists() or results_file.stat().st_size == 0
                 df_res.drop(columns=["best_pipe"]).to_csv(results_file, mode=mode, header=header, index=False)
 
-                logger.info("Résultat enregistré dans %s (Run_ID=%s)", results_file, run_id)
+                logger.info("Résultat enregistré dans %s (Run_ID=%s)", str(results_file), run_id)
                 run_id += 1
 
     return pd.DataFrame(results_list)
