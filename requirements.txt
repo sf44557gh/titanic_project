@@ -1,10 +1,15 @@
-requirements.txt
+# requirements.txt
+# C’est un fichier texte (pas Python).
+# Liste des librairies utilisées.
+# Il contient la liste des packages Python nécessaires pour que le projet fonctionne (pandas, numpy, scikit-learn, …).
+# Quand quelqu’un (ou moi sur un autre ordi) veut lancer ton projet, il suffit de faire :
+# pip install -r requirements.txt
+# But: Installer toutes les dépendances.
+# Cela permet de garantir la portabilité de mon projet.
 
-C’est un fichier texte (pas Python).
-Liste des librairies utilisées.
-Il contient la liste des packages Python nécessaires pour que le projet fonctionne (pandas, numpy, scikit-learn, …).
-Quand quelqu’un (ou moi sur un autre ordi) veut lancer ton projet, il suffit de faire :
-pip install -r requirements.txt
-But: Installer toutes les dépendances.
-Cela permet de garantir la portabilité de mon projet.
-
+pandas
+numpy
+scikit-learn
+matplotlib
+plotly
+jupyter
