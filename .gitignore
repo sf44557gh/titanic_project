@@ -1,67 +1,54 @@
+# ---- Dossiers spécifiques à PyCharm / JetBrains ----
+.idea/
+*.iml
 
+# ---- Notebooks Jupyter checkpoints ----
+**/.ipynb_checkpoints/
 
----
-# --- Données locales (on ne versionne pas les gros CSV)
-data/raw/*.csv
-data/processed/*
-!data/processed/.gitkeep   # garde le dossier vide dans Git
-
-# --- Résultats, modèles, soumissions générés automatiquement
-results/
-models/
-submissions/
-
-# --- Fichiers temporaires Jupyter
-.ipynb_checkpoints/
-
-# --- Cache Python
-__pycache__/
-*.pyc
-
-# --- Environnement virtuel (si tu en utilises un dans le dossier)
+# ---- Environnements virtuels ----
 .venv/
-env/
 venv/
+env/
+ENV/
 
-# --- Fichiers système (Windows / Mac)
+# ---- Fichiers compilés Python ----
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# ---- Données brutes ou temporaires ----
+data/raw/
+data/interim/
+data/tmp/
+*.csv
+*.tsv
+*.parquet
+*.h5
+*.pkl
+
+# ---- Résultats / sorties ----
+results/
+outputs/
+logs/
+*.log
+
+# ---- OS files ----
 .DS_Store
 Thumbs.db
 
+# ---- Sauvegardes / fichiers temporaires ----
+*.bak
+*.swp
+*.tmp
 
----
-Ce que ça fait :
-
-data/, results/, models/, submissions/ → jamais poussés sur GitHub (mais tu les gardes en local).
-
-__pycache__ et *.pyc → fichiers compilés inutiles.
-
-.ipynb_checkpoints/ → versions parasites de Jupyter.
-
-.venv/, env/, venv/ → si tu crées un venv dans ton projet, il sera ignoré.
-
-.DS_Store, Thumbs.db → fichiers systèmes Mac/Windows.
-
-Trick : pour  garder la structure vide (par ex. data/ sans CSV), tu peux mettre un fichier vide nommé .gitkeep dedans.
+# ---- Fichiers spécifiques Kaggle ----
+# (souvent inutiles à versionner, car gros et générés automatiquement)
+*.zip
+*.7z
+*.tar
+*.gz
 
 
 
----
-
-3. .gitignore
-
-C’est un fichier spécial pour Git.
-
-Il dit à Git : n’ajoute pas ces fichiers/dossiers dans le dépôt GitHub.
-
-Exemple : tu ne veux pas versionner :
-
-les données brutes (data/raw/ → trop gros, pas autorisé par Kaggle/GitHub),
-
-les résultats (results/ → générés automatiquement),
-
-les modèles .pkl → lourds et régénérables,
-
-les checkpoints Jupyter .ipynb_checkpoints/ → inutiles.
-
-Note: Ne supprime rien de mon projet local, ça dit juste à Git ne les envoie pas sur GitHub.
-Donc mon code continuera à fonctionner normalement en local.
+.idea/
